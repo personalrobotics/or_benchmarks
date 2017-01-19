@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <openrave/plugin.h>
 #include <benchmarks/CollisionCheckingBenchmark.h>
 #include <benchmarks/KinematicBenchmarks.h>
+#include <benchmarks/CheckerResultModule.h>
 
 using namespace OpenRAVE;
 
@@ -44,7 +45,10 @@ InterfaceBasePtr CreateInterfaceValidated(InterfaceType type, std::string const 
 	}else if(type == PT_Module && name == "kinematicbenchmarks"){
 		RAVELOG_INFO("[CollisionCheckingModule] Generating kinematic benchmarks plugin.\n");
         return OpenRAVE::InterfaceBasePtr(new benchmarks::KinematicBenchmarks(env));
-	}
+	}else if(type == PT_Module && name == "checkerresultmodule"){
+    RAVELOG_INFO("[CheckerResultModule] Generating checker evaluator plugin.\n");
+        return OpenRAVE::InterfaceBasePtr(new benchmarks::CheckerResultModule(env));
+  }
 
     RAVELOG_INFO("[CollisionCheckingModule] Generating empty pointer.\n");
 
@@ -55,6 +59,7 @@ void GetPluginAttributesValidated(PLUGININFO &pinfo)
 {
 	pinfo.interfacenames[PT_Module].push_back("CollisionCheckingBenchmark");
 	pinfo.interfacenames[PT_Module].push_back("KinematicBenchmarks");
+  pinfo.interfacenames[PT_Module].push_back("CheckerResultModule");
 }
 
 OPENRAVE_PLUGIN_API void DestroyPlugin()

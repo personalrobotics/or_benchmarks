@@ -10,16 +10,14 @@ catkin_package()
 
 find_package(Boost REQUIRED COMPONENTS program_options system)
 find_package(OpenRAVE REQUIRED)
-find_package(catkin COMPONENTS
-    moveit_core
-    moveit_ros_planning_interface
-)
 
 include(FindPkgConfig)
 pkg_check_modules(YamlCpp REQUIRED yaml-cpp)
 if (${YamlCpp_VERSION} VERSION_LESS 0.5.0)
     message(FATAL_ERROR "Using old verison of yaml-cpp (< 0.5.0) API. Newer version required.")
 endif ()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 include_directories(
     "include/"
@@ -41,6 +39,7 @@ openrave_plugin("${PROJECT_NAME}_plugin"
     src/CollisionCheckingBenchmark.cpp
     src/DataUtils.cpp
     src/KinematicBenchmarks.cpp
+    src/CheckerResultModule.cpp
 )
 target_link_libraries("${PROJECT_NAME}_plugin"
     profiler
@@ -63,19 +62,6 @@ target_link_libraries(run_profiler
     ${OpenRAVE_LIBRARIES}
 )
 
-# MoveIt plugin.
-if (MOVEIT_CORE_FOUND)
-    add_executable(run_moveit_benchmark
-        src/MoveItModule.cpp
-    )
-    target_link_libraries(run_moveit_benchmark
-        ${catkin_LIBRARIES}
-        ${YamlCpp_LIBRARIES}
-    )
-    install(TARGETS run_moveit_benchmark
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-    )
-endif (MOVEIT_CORE_FOUND)
 
 # Memory Leak
 add_executable(run_memory_leak
