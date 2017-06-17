@@ -10,4 +10,7 @@
   <author email="jeking@cs.cmu.edu">Jennifer King</author>
   <license>BSD</license>
   <buildtool_depend>catkin</buildtool_depend>
+  <depend>or_stub_checker</depend>
+  <depend>or_benchmarks</depend>
+  <depend>prpy</depend>
 </package>

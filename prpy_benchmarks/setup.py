@@ -6,6 +6,6 @@ d = generate_distutils_setup(
     packages=[
         'prpy_benchmarks',
     ],
-    package_dir={'': 'scripts'},
+    package_dir={'': 'src'},
 )
 setup(**d)

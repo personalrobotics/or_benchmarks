@@ -1,0 +1,5 @@
+queries:
+    - table_query_0.yaml
+planners:
+    - cbirrt_default.yaml
+    - snap_default.yaml
