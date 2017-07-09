@@ -43,4 +43,14 @@ Alternatively, you can define a yaml file with a list of queries and planners:
 $ rosrun prpy_benchmarks run_benchmarks.py --benchmarkfiles benchmarks/table_benchmarks.yaml
 ```
 
-The ```--outdir``` parameter can be passed to the ```run_benchmarks.py``` to indicate that results for each benchmark should be saved in a particular directory. 
+The ```--outdir``` parameter can be passed to the ```run_benchmarks.py``` to indicate that results for each benchmark should be saved in a particular directory.
+
+## Examples
+
+Check the `prpy_benchmarks/example` folder for a set of examples on generating a log, running benchmarks for planning and collision checking, and evaluating a collision checker engine on the checks performed during that planning query. The examples can be run in the following way (this shows CBiRRT as the planner and PQP as the collision checker):
+
+```
+$ python generate_log_example.py
+$ python execute_benchmarks_example.py --logfile <name-of-logfile-from-previous-line> --plannerfile ../planners/cbirrt_default.yaml --outfile_plan cbirrt_plan_benchmark.yaml --outfile_checks cbirrt_checks_benchmark.json
+$ python evaluate_collisionchecks_example.py --benchmark cbirrt_checks_benchmark.json --engine pqp
+```

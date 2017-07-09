@@ -43,13 +43,10 @@ def execute_benchmark(queryfile, plannerfile, log_collision_checks=False, env=No
                           planner_metadata.planner_class_name,
                           **planner_metadata.planner_parameters)
 
-    # Create a named planner 
-    named_planner = NamedPlanner(delegate_planner=planner)
-
 
     # Get the planning method from the planner
     try:
-        planning_method = getattr(named_planner, query.planning_method)
+        planning_method = getattr(planner, query.planning_method)
     except AttributeError:
         raise RuntimeError('That planner does not support planning method {}!'.format(query.planning_method))
 
@@ -105,7 +102,6 @@ def execute_benchmark(queryfile, plannerfile, log_collision_checks=False, env=No
         check_info = stubchecker.SendCommand('GetLogInfo')
         check_info_dict = json.loads(check_info)
         stubchecker.SendCommand('Reset')
-
 
         # Save only the relevant DOF values used for self+env checks
         relevant_dof_list = get_relevant_DOF_list(check_info_dict)
@@ -188,7 +184,7 @@ def evaluate_collisioncheck_benchmark(engine,env=None,robot=None,collresultfile=
             # Specify env and self check methods
             standalone_checklog_dict = {'methodname': 'CheckStandaloneSelfCollision',
                                 'body' : robot.GetName()}
-            body_env_checklog_dict = {'methodname' : 'CheckCollision_body',
+            body_env_checklog_dict = {'methodname' : 'CheckCollision_body_env',
                                 'body' : robot.GetName()}
 
             check_order = [body_env_checklog_dict,standalone_checklog_dict]
@@ -255,7 +251,7 @@ def get_relevant_DOF_list(check_info_dict):
             method_name = record['methodname']
             
             if method_name == 'CheckStandaloneSelfCollision':
-                if prev_method_name == 'CheckCollision_body':
+                if prev_method_name.startswith('CheckCollision_body'):
 
                     # Relevant DOF set; record in list
                     relevant_DOF_list.append(check_info_dict[check_key]['dofvals'])
